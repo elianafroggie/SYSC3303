@@ -29,7 +29,7 @@ public class Elevator implements Runnable {
 
             printStatus(); // Method prints the current status of the elevator as it should indicate that it is active to use
 
-            SimulatorInfo elevatorRequest = receiveElevatorInfo(); // Gets the elevator requests from the shared buffer
+            Inform elevatorRequest = receiveElevatorInfo(); // Gets the elevator requests from the shared buffer
 
             if (elevatorRequest.getCurrentFloor() == currentFloor) {
                 targetFloor = elevatorRequest.getButton(); // Updates target floor if request made for the current floor
@@ -39,7 +39,7 @@ public class Elevator implements Runnable {
 
             printArrivalStatus();
 
-            sharedBuffer.send(new SimulatorInfo(currentFloor)); // Current floor gets informed to the shared buffer
+            sharedBuffer.send(new Inform(currentFloor)); // Current floor gets informed to the shared buffer
 
             sleepModerately(); // Pauses the execution of program
         }
@@ -62,7 +62,7 @@ public class Elevator implements Runnable {
     }
 
     // Shared buffer which is the Scheduler gives an elevator request, whereas receiver ID is given as parameter of value 1
-    private SimulatorInfo receiveElevatorInfo() {
+    private Inform receiveElevatorInfo() {
         return sharedBuffer.receive(1);
     }
 
