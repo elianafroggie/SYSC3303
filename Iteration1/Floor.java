@@ -9,7 +9,7 @@ public class Floor {
     private boolean upLamp; //true if the up lamp is on
     private boolean downlamp; //true if the down lamp is on
 
-    public void Floor(int floorNumber) {
+    public Floor(int floorNumber) {
         this.floorNumber = floorNumber;
         this.downButton = false;
         this.downlamp = false;
