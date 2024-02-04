@@ -30,6 +30,9 @@ Open up the following Test files one by one: ElevatorTest.java, FloorTest.java, 
 ### Group Roles:
 
 Hemilkumar Patel: Elevator.java, Inform.java, and README.md
+
 Ben Mostafa: Floor.java, and README.md
+
 Cholen Premjeyanth: Scheduler.java, UML Class Diagram, and README.md
+
 Eliana Schartner: Sequence Diagram, JUnit Test files, and README.md
