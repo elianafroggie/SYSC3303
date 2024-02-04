@@ -3,13 +3,13 @@
  */
 
 public class Floor {
-    private final int floorNumber; //the floor number
+    private int floorNumber; //the floor number
     private boolean upButton; //true if the up button is prssed otherwise false
     private boolean downButton; //true if the down button is pressed otherwise false
     private boolean upLamp; //true if the up lamp is on
     private boolean downlamp; //true if the down lamp is on
 
-    public Floor(int floorNumber) {
+    public void Floor(int floorNumber) {
         this.floorNumber = floorNumber;
         this.downButton = false;
         this.downlamp = false;

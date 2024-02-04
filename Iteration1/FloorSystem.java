@@ -14,7 +14,7 @@ public class FloorSystem implements Runnable {
 
     private void initializeFloors(int floors) {
         for (int i = 0; i < floors; i++) {
-
+            this.floors.add(new Floor(i));
 
 
         }
