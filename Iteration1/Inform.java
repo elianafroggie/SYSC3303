@@ -1,7 +1,3 @@
-/**
-  * @author Hemil
-  */
-
 // Immutable date-time object that represents a time, as in hour-minute-second
 import java.time.LocalTime;
 public class Inform {
