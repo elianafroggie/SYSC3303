@@ -14,8 +14,11 @@
 ### Step-by-Step Setup Instructions:
 
 (1) Download the ZIP archive file onto your Computer, and Open the Iteration 1 Project Folder. 
+
 (2) Open IntelliJ IDEA IDE and Setup a new Workspace. 
+
 (3) Under the Main Menu, Click File and then Open… You should be able to view the imported Iteration 1 Project Folder in the Package Explorer screen.
+
 (4) Open and View the JAVA Test file and Execute it.
 
 
