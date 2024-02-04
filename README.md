@@ -4,11 +4,13 @@
 
 (1) Elevator.java - This source file represents the Elevator subsystem in the concurrent system, handling the basic functionality of the elevator of moving between floor levels.
 
-(2) Floor.java - This source file (consists of floor and floorsystem classes) represents the Floor subsystem in the concurrent system, so it reads events from a file and sends the requests to the Scheduler for further processing.
+(2) Floor.java - 
 
-(3) Scheduler.java - This source file its as the Central Server, mainly managing the communication between the Elevator and Floor threads, handling send and received requests, and controlling the flow of the information.
+(3) FloorSystem.java - 
 
-(4) Inform.java - This source file has a Inform class defined, which is encapsulating information based upon requests and messages passed between the three subsystems, including events.
+(4) Scheduler.java - This source file its as the Central Server, mainly managing the communication between the Elevator and Floor threads, handling send and received requests, and controlling the flow of the information.
+
+(5) Inform.java - This source file has a Inform class defined, which is encapsulating information based upon requests and messages passed between the three subsystems, including events.
 
 
 ### Step-by-Step Setup Instructions:
@@ -31,7 +33,7 @@ Open up the following Test files one by one: ElevatorTest.java, FloorTest.java, 
 
 Hemilkumar Patel: Elevator.java, Inform.java, and README.md
 
-Ben Mostafa: Floor.java, and README.md
+Ben Mostafa: Floor.java, FloorSystem.java and README.md
 
 Cholen Premjeyanth: Scheduler.java, UML Class Diagram, and README.md
 
