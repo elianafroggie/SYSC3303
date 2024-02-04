@@ -7,16 +7,21 @@ public class FloorSystem implements Runnable {
     private Scheduler sharedBuffer; //shared buffer between threads
     private ArrayList<Floor> floors; //an array of all the floors in the building
 
-    public FloorSystem(Scheduler sharedBuf, int floors) {
+    public FloorSystem(Scheduler sharedBuf, ArrayList<Floor>  floors, int numFloors) {
         this.sharedBuffer = sharedBuf;
-        initializeFloors(floors);
+        initializeFloors(floors, numFloors);
     }
 
-    private void initializeFloors(int floors) {
-        for (int i = 0; i < floors; i++) {
+    private void initializeFloors(ArrayList<Floor> floors, int numFloors) {
+        for (int i = 0; i < numFloors; i++) {
             this.floors.add(new Floor(i));
 
 
         }
+    }
+
+    @Override
+    public void run() {
+
     }
 }
