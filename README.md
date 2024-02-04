@@ -4,7 +4,7 @@
 
 (1) Elevator.java - This source file represents the Elevator subsystem in the concurrent system, handling the basic functionality of the elevator of moving between floor levels.
 
-(2) Floor.java - This source file represents the Floor subsystem in the concurrent system, so it reads events from a file and sends the requests to the Scheduler for further processing.
+(2) Floor.java - This source file (consists of floor and floorsystem classes) represents the Floor subsystem in the concurrent system, so it reads events from a file and sends the requests to the Scheduler for further processing.
 
 (3) Scheduler.java - This source file its as the Central Server, mainly managing the communication between the Elevator and Floor threads, handling send and received requests, and controlling the flow of the information.
 
