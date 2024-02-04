@@ -7,8 +7,8 @@ public class FloorSystem implements Runnable {
     private Scheduler sharedBuffer; //shared buffer between threads
     private ArrayList<Floor> floors; //an array of all the floors in the building
 
-    public FloorSystem(Scheduler sharedBuf, ArrayList<Floor>  floors, int numFloors) {
-        this.sharedBuffer = sharedBuf;
+    public FloorSystem(Scheduler sharedBuffer, ArrayList<Floor>  floors, int numFloors) {
+        this.sharedBuffer = sharedBuffer;
         initializeFloors(floors, numFloors);
     }
 
