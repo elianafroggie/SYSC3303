@@ -1,7 +1,3 @@
-/**
-  * @author Hemil
-  */
-
 // Thread for Elevator that is a client in the system
 public class Elevator implements Runnable {
 
