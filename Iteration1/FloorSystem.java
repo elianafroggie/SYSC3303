@@ -3,11 +3,11 @@
  */
 
 import java.util.*;
-public class FloorSystem implements Runnable {
+public class FloorSystem extends Thread {
     private Scheduler sharedBuffer; //shared buffer between threads
     private ArrayList<Floor> floors; //an array of all the floors in the building
 
-    public FloorSystem(Scheduler sharedBuffer, ArrayList<Floor>  floors, int numFloors) {
+    public FloorSystem(Scheduler sharedBuffer, ArrayList<Floor> floors, int numFloors) {
         this.sharedBuffer = sharedBuffer;
         initializeFloors(floors, numFloors);
     }
@@ -16,10 +16,5 @@ public class FloorSystem implements Runnable {
         for (int i = 0; i < numFloors; i++) {
             this.floors.add(new Floor(i));
         }
-    }
-
-    @Override
-    public void run() {
-
     }
 }
