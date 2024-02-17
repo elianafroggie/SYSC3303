@@ -13,8 +13,10 @@ public class FloorSystem extends Thread {
     }
 
     private void initializeFloors(ArrayList<Floor> floors, int numFloors) {
+        floors = new ArrayList<Floor>();
         for (int i = 0; i < numFloors; i++) {
-            this.floors.add(new Floor(i));
+            floors.add(new Floor(i));
         }
+        this.floors = floors;
     }
 }

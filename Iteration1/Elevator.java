@@ -85,4 +85,12 @@ public class Elevator implements Runnable {
             Thread.currentThread().interrupt();
         }
     }
+
+    public int getCurrentFloor() {
+        return currentFloor;
+    }
+
+    public int getTargetFloor() {
+        return targetFloor;
+    }
 }
