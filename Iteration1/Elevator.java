@@ -1,3 +1,5 @@
+import java.util.concurrent.BlockingQueue; // Imports the BlockingQueue Interface
+
 // Thread for Elevator that is a client in the system
 public class Elevator implements Runnable {
 
@@ -5,10 +7,12 @@ public class Elevator implements Runnable {
     private Scheduler sharedBuffer;
     private int currentFloor;
     private int targetFloor;
+    private BlockingQueue<Inform> queuesRequested; // Allows the Elevator to Receive Requests from the Scheduler subsystem
 
     // Elevator thread constructor
     public Elevator(Scheduler sharedBuffer) {
         this.sharedBuffer = sharedBuffer;
+        this.queuesRequested = sharedBuffer.getElevatorQueue(); // Obtain the elevator requests queue from the subsystem of Scheduler
         initializeElevator(); // Calls method for additional initialization
     }
 
@@ -24,26 +28,32 @@ public class Elevator implements Runnable {
     }
 
     // Run method for the elevator thread
+    // Continuously listens for Elevator requests from the added queue in Iteration 2 (queuesRequested), and processes the requested in the order received
+    // Communicates the information with the shared buffer for the system
     public void run() {
         while (isAtRest()) {
 
             printStatus(); // Method prints the current status of the elevator as it should indicate that it is active to use
 
-            Inform elevatorRequest = receiveElevatorInfo(); // Gets the elevator requests from the shared buffer
+            // used to invoke method that may throw checked exceptions
+            try {
+                Inform elevatorRequest = queuesRequested.take(); // Gives the ability for the elevator to receive the requests from the queuesRequested
+                // take() method is part of the Blocking Queue Interface where it is used to remove the first or the head element from the given queue
+                // so once an element is actually taken from the queue, then it shouldn't be in the queue list
 
-            if (elevatorRequest.getCurrentFloor() == currentFloor) {
-                targetFloor = elevatorRequest.getButton(); // Updates target floor if request made for the current floor
-            } else {
-                moveFloors(elevatorRequest.getCurrentFloor(), elevatorRequest.getButton()); // Updates target floor and moves to destination floor, if the request was made for a different floor
+                if (elevatorRequest.getCurrentFloor() == currentFloor) {
+                    targetFloor = elevatorRequest.getButton(); // Updates target floor if request made for the current floor
+                } else {
+                    moveFloors(elevatorRequest.getCurrentFloor(), elevatorRequest.getButton()); // Updates target floor and moves to destination floor, if the request was made for a different floor
+                }
+                printArrivalStatus();
+
+                sharedBuffer.send(new Inform(currentFloor)); // Current floor gets informed to the shared buffer
+            } catch(InterruptedException e) {
+                Thread.currentThread().interrupt(); // Interrupt status of the current thread would be set if any methods will throws an InterruptedException
             }
-
-            printArrivalStatus();
-
-            sharedBuffer.send(new Inform(currentFloor)); // Current floor gets informed to the shared buffer
-
             sleepModerately(); // Pauses the execution of program
         }
-
     }
 
     // Prints the initial status of the elevator, to detect if the elevator is available or not
@@ -67,11 +77,17 @@ public class Elevator implements Runnable {
     }
 
     // Method to used to explain the logic of moving between floors in the elevator car
+    // Updated the moveFloors() method so that the logic can print the outcome of the elevator moving up or down according to the destination floor compared to the source floor
     private void moveFloors(int sourceFloor, int destinationFloor) {
         updateCurrentFloor(sourceFloor);
 
-        System.out.printf("The %s on Floor %d will go to Floor %d%n",
-                Thread.currentThread().getName(), currentFloor, destinationFloor);
+        if(destinationFloor > sourceFloor) {
+            System.out.printf("The %s on Floor %d will go upwards to the Floor %d%n",
+                    Thread.currentThread().getName(), currentFloor, destinationFloor);
+        } else {
+            System.out.printf("The %s on Floor %d will go downwards to the Floor %d%n",
+                    Thread.currentThread().getName(), currentFloor, destinationFloor);
+        }
 
         updateCurrentFloor(destinationFloor);
     }
@@ -84,13 +100,5 @@ public class Elevator implements Runnable {
             // Sets the interrupt flag for the current thread meaning that the thread has been interrupted
             Thread.currentThread().interrupt();
         }
-    }
-
-    public int getCurrentFloor() {
-        return currentFloor;
-    }
-
-    public int getTargetFloor() {
-        return targetFloor;
     }
 }
