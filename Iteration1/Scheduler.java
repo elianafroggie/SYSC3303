@@ -6,14 +6,19 @@ public class Scheduler implements Runnable {
     // Queues are mainly going to be used for asynchronous communication so subsystems can add requests individually, and
     // first BlockingQueue instance to handle requests from the Floor subsystem
     private final BlockingQueue<Inform> floorRequests;
-    // second BlockingQueue instance to handle requests from the Elevator subsystem
+    // second BlockingQueue instance to handle requests from the Elevator subsystem, with no other in-depth purpose
     private final BlockingQueue<Inform> elevatorRequests;
-
+    // Variable named elevatorQueue for the declaration of the third private final BlockingQueue instance
+    // Queue is mainly used to receive and store the requests that are only for the Elevator subsystem
+    private final BlockingQueue<Inform> elevatorQueue;
     // The Scheduler() constructor initializes the queues with a LinkedBlockingQueue class
     public Scheduler() {
         // No fixed capacity allowing the queues to adjust dynamically to the number of requests received, and providing flexibility
+        // LinkedBlockingQueue is a thread-safe design for the BlockingQueue interface, and used where multiple threads are involved
         floorRequests = new LinkedBlockingQueue<>();
         elevatorRequests = new LinkedBlockingQueue<>();
+        // Added an initialization of the elevatorQueue using a new LinkedBlockingQueue instance where it is an empty queue (array) with a dynamic initial capacity
+        elevatorQueue = new LinkedBlockingQueue<>();
     }
 
     // The Run method for the Scheduler thread
@@ -38,6 +43,16 @@ public class Scheduler implements Runnable {
 
             }
         }
+    }
+
+    /**
+     * Returns the BlockingQueue used to contain the Elevator requests
+     * Method grants full access to the elevator queue list, so basically the method is allowing controlled access to the elevator queue from outside the Scheduler class
+     * Queue is encapsulated so other classes can retrieve it without giving any internal information of the Scheduler class
+     * @return BlockingQueue keeps the elevator requests
+     */
+    public BlockingQueue<Inform> getElevatorQueue() {
+        return elevatorQueue;
     }
 
     // Method for processing requests of a specific subsystem
