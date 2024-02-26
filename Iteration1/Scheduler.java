@@ -80,7 +80,7 @@ public class Scheduler implements Runnable {
             if (input.getMessageSender() == 0) {
                 // Put (enqueue) the request in the floorRequests queue
                 floorRequests.put(input);
-            } else if (input.getMessageSender() == 1) {
+            } else if (input.getMessageSender() == 1) { // The method returns 1 indicating the message is from the Elevator subsystem, the request would be placed in the elevatorRequests queue using put method.
                 // Put the request in the elevatorRequests queue
                 elevatorRequests.put(input);
             }
