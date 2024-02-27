@@ -21,7 +21,7 @@ public class UnitTests {
     @BeforeEach
     public void setup(){
         scheduler = new Scheduler();
-        floorSystem = new FloorSystem(scheduler, new ArrayList<>(), 5);
+        floorSystem = new FloorSystem(scheduler, 5);
         elevator = new Elevator(scheduler);
         floorThread = new Thread(floorSystem, "FloorSystem");
         elevatorThread = new Thread(elevator, "Elevator");
@@ -90,11 +90,12 @@ public class UnitTests {
     @Test
     void testFloorQueuesRequested(){
         CountDownLatch latch = new CountDownLatch(1);
-        inform = new Inform(0,2, "Down", 0, LocalTime.now());
+        floorThread.start();
         elevatorThread.start();
+        inform = new Inform(3, LocalTime.now());
         scheduler.send(inform);
         assertEquals(inform, scheduler.receive(0), "Message not received by scheduler");
-        System.out.println(elevator.getCurrentFloorQueue());
+        //System.out.println(elevator.getCurrentFloorQueue());
         try{
             latch.await();
         } catch (InterruptedException e ){

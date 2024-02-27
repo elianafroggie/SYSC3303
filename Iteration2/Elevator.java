@@ -1,3 +1,4 @@
+import java.time.LocalTime;
 import java.util.concurrent.BlockingQueue; // Imports the BlockingQueue Interface
 
 
@@ -57,7 +58,7 @@ public class Elevator implements Runnable {
                 }
                 printArrivalStatus();
 
-                sharedBuffer.send(new Inform(currentFloor)); // Current floor gets informed to the shared buffer
+                sharedBuffer.send(new Inform(currentFloor, LocalTime.now())); // Current floor gets informed to the shared buffer
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt(); // Interrupt status of the current thread would be set if any methods will throws an InterruptedException
             }

@@ -22,12 +22,12 @@ public class Inform {
         this.currentTime = currentTime;
     }
     // Constructor to be used when creating an instance when Elevator sends messages to the Scheduler
-    public Inform(int currentFloor){
+    public Inform(int currentFloor, LocalTime currentTime){
         this.button = 0; // button not applicable for this
         this.currentFloor = currentFloor;
         this.travelDirection = ""; // direction of travel set to an empty string, since it is not applicable
         this.messageSender = 1; // setting the send message to 1, means the information is being sent from the Elevator component
-        this.currentTime = null; // set the current time to null,
+        this.currentTime = currentTime; // set the current time to null,
     }
 
     // The getter methods will allow us to access the internal state of the Inform object externally outside of the class to obtain information for example by the Scheduler system
