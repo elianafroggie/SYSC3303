@@ -35,6 +35,11 @@ public class Floor {
         return downLamp;
     }
 
+    public void pressUpButton() {
+        this.upButton = true;
+        this.upLamp = true;
+    }
+
     public void pressDownButton() {
         this.downButton = true;
         this.downLamp = true;
@@ -43,12 +48,10 @@ public class Floor {
     public void upWait() {
         this.upButton = false;
     }
+
     public void downWait() {
         this.downButton = false;
     }
 
-    public void pressUpButton() {
-        this.upButton = true;
-        this.upLamp = true;
-    }
+
 }

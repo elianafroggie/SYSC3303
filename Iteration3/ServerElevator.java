@@ -8,7 +8,6 @@ import java.util.List;
 
 class ServerElevator {
     DatagramSocket sendSocket, receiveSocket;
-
     private elevatorState currentState;
     private int currentFloor;
     private String direction;
@@ -28,9 +27,9 @@ class ServerElevator {
 
     public ServerElevator(int port) {
         try {
-            // Construct DatagramSockets for sending/receiving. The server will receive packets from port 69.
+            // Construct DatagramSockets for sending/receiving. The server will receive packets from port 1027 + port.
             sendSocket = new DatagramSocket();
-            receiveSocket = new DatagramSocket(69);
+            receiveSocket = new DatagramSocket(1027+port);
             this.port = port;
         } catch (SocketException se) {
             se.printStackTrace();

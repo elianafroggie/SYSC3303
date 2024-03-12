@@ -10,7 +10,7 @@ public class Main {
         }
 
         // Start the processes or threads (the functions for each class)
-        Thread clientFloorThread = new Thread(() -> client.readCSV("", "", 23));
+        Thread clientFloorThread = new Thread(() -> client.readCSV("", "", 1026));
         Thread hostSchedulerThread = new Thread(host::schedulerRequests);
 
         // Start the threads

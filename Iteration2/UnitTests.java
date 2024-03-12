@@ -25,7 +25,7 @@ public class UnitTests {
         elevator = new Elevator(scheduler);
         floorThread = new Thread(floorSystem, "FloorSystem");
         elevatorThread = new Thread(elevator, "Elevator");
-        inform = new Inform(0,5, "Down", 0, LocalTime.now());
+        inform = new Inform(0,5, "Down", LocalTime.now());
     }
 
     // Begin by testing construction
@@ -74,7 +74,7 @@ public class UnitTests {
     @Test
     void testUpButton(){
         CountDownLatch latch = new CountDownLatch(1);
-        inform = new Inform(0,2, "Up", 0, LocalTime.now());
+        inform = new Inform(0,2, "Up", LocalTime.now());
         elevatorThread.start();
         scheduler.send(inform);
         assertEquals(inform, scheduler.receive(0));
@@ -92,10 +92,12 @@ public class UnitTests {
         CountDownLatch latch = new CountDownLatch(1);
         floorThread.start();
         elevatorThread.start();
+        System.out.println(elevator.getCurrentFloorQueue());
         inform = new Inform(3, LocalTime.now());
+        System.out.println(elevator.getCurrentFloorQueue());
         scheduler.send(inform);
         assertEquals(inform, scheduler.receive(0), "Message not received by scheduler");
-        //System.out.println(elevator.getCurrentFloorQueue());
+        System.out.println(elevator.getCurrentFloorQueue());
         try{
             latch.await();
         } catch (InterruptedException e ){
@@ -109,7 +111,7 @@ public class UnitTests {
     @Test
     void testElevatorQueuesRequested(){
         CountDownLatch latch = new CountDownLatch(1);
-        inform = new Inform(4,1, "Up", 0, LocalTime.now());
+        inform = new Inform(4,1, "Up", LocalTime.now());
         elevatorThread.start();
         scheduler.send(inform);
         assertEquals(inform, scheduler.receive(1), "Message not received by scheduler");

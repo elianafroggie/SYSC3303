@@ -15,7 +15,7 @@ public class HostScheduler {
 
     public HostScheduler() {
         try {
-            floorSocket = new DatagramSocket(23);
+            floorSocket = new DatagramSocket(1025);
             elevatorSockets = new ArrayList<>();
             elevatorDataList = new ArrayList<>();
             floorDataString = "";

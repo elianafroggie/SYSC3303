@@ -14,7 +14,7 @@ public class Inform {
 
     // Used logical constructors which take into account different scenarios when creating instances for Floor or Elevator
     // Constructor to be used for creating an instance when Floor is passing information to the Scheduler
-    public Inform(int button, int currentFloor, String travelDirection, int messageSender, LocalTime currentTime){
+    public Inform(int button, int currentFloor, String travelDirection, LocalTime currentTime){
         this.button = button; // during an event, set the button value based on the pressed button only
         this.currentFloor = currentFloor; // sets the current floor number
         this.travelDirection = travelDirection; // based on the event, set the direction of travel so either Up or Down

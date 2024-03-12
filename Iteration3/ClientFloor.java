@@ -16,7 +16,7 @@ public class ClientFloor {
         try{
             // Try to construct the sendReceive socket that will bind to the available port
             // and will attempt to send/receive requests to and from the scheduler
-            toSchedulerSocket = new DatagramSocket(23);
+            toSchedulerSocket = new DatagramSocket(1026);
         }catch(SocketException se){
             se.printStackTrace();
             System.exit(1);
@@ -63,7 +63,7 @@ public class ClientFloor {
         byte[] data = messageToScheduler.getBytes();
         InetAddress address;
         try{
-            return new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 23);
+            return new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 1026);
         }catch(IOException e){
             e.printStackTrace();
             return null;

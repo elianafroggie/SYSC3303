@@ -20,6 +20,12 @@ public class FloorSystem extends Thread {
     public Floor getFloor(int floor) {
         return floors.get(floor - 1);
     }
+
+    public void callFloorUp(int floor) {
+        Floor currFloor = getFloor(floor);
+
+        sharedBuffer.send(new Inform(floor, LocalTime.now()));
+    }
     @Override
     public void run() {
         System.out.println(Thread.currentThread().getName() + " is available.");
