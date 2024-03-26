@@ -3,7 +3,8 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
-
+import java.util.Timer;
+import java.util.TimerTask;
 public class Elevator implements Runnable {
     protected enum elevatorState {
         DOORS_OPENING,
@@ -14,7 +15,7 @@ public class Elevator implements Runnable {
     }
     private final int elevatorId;
     private elevatorState currentState;
-    int currentFloor = 1;
+    private int currentFloor;
     private final ElevatorSubsystem elevatorSubsystem;
     private List<Integer> stopList;
     private List<Integer> nextDownList = new ArrayList<>();
@@ -31,6 +32,14 @@ public class Elevator implements Runnable {
     // Represents a permanent or critical error condition
     private final String PERMANENT_ERROR = "2";
 
+    private final int MAX_FLOOR = 10;
+
+    private boolean doorOpen;
+
+    private Timer programTimer;
+
+    // set a flag to close elevator door forcefully
+    private boolean attemptedDoorClosure = false;
 
 
     public Elevator(int elevatorId, ElevatorSubsystem elevatorSubsystem) {
@@ -41,6 +50,72 @@ public class Elevator implements Runnable {
         this.nextDownList = new ArrayList<>();
         currentState = elevatorState.WAITING;
         System.out.println("Elevator created: " + this.elevatorId);
+
+        currentFloor = 1;
+        doorOpen = false;
+        programTimer = new Timer();
+    }
+
+    public void elevatorMovement(int destinationFloor) {
+        startTimer(destinationFloor);
+
+        // execute elevator movement
+        if (destinationFloor > currentFloor) {
+
+        }
+    }
+
+
+    // method for door operation and if its opening or not
+    private void doorOperation(boolean open){
+        doorOpen = open;
+        if (!doorOpen) {
+            doorFaultHandling();
+        }
+    }
+
+
+    // method to start the timer for provided destination floor the elevator needs to go to
+    private void startTimer(int destinationFloor) {
+        programTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timerFaultHandling();
+            }
+        }, travelTimeCalculation(destinationFloor));
+    }
+
+    // method to handle timer related faults taking place
+    private void timerFaultHandling() {
+        System.out.println("Fault has been detected as the timer has ran out of time before reaching the destination floor");
+        elevatorStateReset();
+    }
+
+    // update the elevator state to waiting if the timer has expired and we need to do fault handle
+    private void elevatorStateReset() {
+        currentState = elevatorState.WAITING;
+    }
+
+    // method to handle door related faults for program
+    private void doorFaultHandling() {
+        System.out.println("Fault has been detected as the door is not opening or it is stuck open");
+        actionDoorClosing();
+
+    }
+
+    // method to close elevator door instantly
+    private void actionDoorClosing() {
+        attemptedDoorClosure = true;
+    }
+
+    // method to calculate time between the floors
+    private long travelTimeCalculation(int destinationFloor) {
+        return Math.abs(destinationFloor - currentFloor) * 1000L;
+    }
+
+    // method to stop the timer
+    private void stopTimer(){
+        programTimer.cancel();
     }
 
     @Override
@@ -226,14 +301,6 @@ public class Elevator implements Runnable {
     }
     public String getDirection(){
         return direction;
-    }
-
-    public void DoorStuckOpenHandling() {
-
-    }
-
-    public void DoorStuckClosedHandling() {
-
     }
 
     public void handleError(String error, boolean doorOpen, int destinationFloor) {
