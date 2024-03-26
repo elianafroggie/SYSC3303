@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Elevator implements Runnable {
-    protected enum elevatorState {
+    public enum elevatorState {
         DOORS_OPENING,
         DOORS_CLOSING,
         MOVING_UP,
@@ -38,6 +38,7 @@ public class Elevator implements Runnable {
             nextDownList = getNextDownList();
             nextUpList = getNextUpList();
             if (currentState == elevatorState.WAITING) {
+                setState(elevatorState.WAITING);
                 if(stopList.isEmpty()){
                     if (!nextUpList.isEmpty() && nextUpList.size() >= nextDownList.size()) {
                         stopList.addAll(nextUpList);
@@ -80,6 +81,7 @@ public class Elevator implements Runnable {
             }
 
             if (currentState == elevatorState.DOORS_OPENING) {
+                setState(elevatorState.DOORS_OPENING);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -89,6 +91,7 @@ public class Elevator implements Runnable {
                 currentState = elevatorState.DOORS_CLOSING;
             }
             if (currentState == elevatorState.DOORS_CLOSING) {
+                setState(elevatorState.DOORS_CLOSING);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -120,6 +123,7 @@ public class Elevator implements Runnable {
                 }
             }
             if (currentState == elevatorState.MOVING_UP) {
+                setState(elevatorState.MOVING_UP);
                 System.out.println("Elevator " + this.elevatorId + " : Moving up");
                 while (currentFloor < stopList.getFirst()) {
                     try {
@@ -133,6 +137,7 @@ public class Elevator implements Runnable {
                 currentState = elevatorState.DOORS_OPENING;
             }
             if (currentState == elevatorState.MOVING_DOWN) {
+                setState(elevatorState.MOVING_DOWN);
                 System.out.println("Elevator " + this.elevatorId + " : Moving Down");
                 while (currentFloor > stopList.getFirst()) {
                     try {
@@ -201,7 +206,7 @@ public class Elevator implements Runnable {
     public synchronized elevatorState getState() {
         return currentState;
     }
-    //public synchronized elevatorState setState(){}
+    public synchronized void setState(elevatorState state){currentState = state;}
     public synchronized List<Integer> getStopList(){
         return stopList;
     }
@@ -215,6 +220,6 @@ public class Elevator implements Runnable {
 
     public synchronized String getInfo(){
         int numberOfStops = stopList.size() + nextUpList.size() + nextDownList.size();
-        return elevatorId + "," + currentState + "," + getDirection() + "," + getCurrentFloor() + "," + numberOfStops;
+        return elevatorId + "," + getState() + "," + getDirection() + "," + getCurrentFloor() + "," + numberOfStops;
     }
 }

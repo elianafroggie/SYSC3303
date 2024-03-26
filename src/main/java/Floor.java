@@ -10,6 +10,7 @@ This class will read a csv file that includes time someone begins waiting at a f
  */
 public class Floor {
     DatagramSocket toFromSchedulerSocket;
+    String responsePacketString;
     int time = 0;
 
     public Floor(){
@@ -53,12 +54,25 @@ public class Floor {
                 sendRequestPacket(sendRequest);
 
                 // Wait until scheduler schedules before sending over next request because idk how much a socket can take
+                // This will also "display" the floor elevator lamp
                 try{
-                    byte[] responseData = new byte[4];
+                    byte[] responseData = new byte[100];
                     DatagramPacket responsePacket = new DatagramPacket(responseData, responseData.length);
                     toFromSchedulerSocket.receive(responsePacket);
+                    responsePacketString = new String(responsePacket.getData());
+                    //System.out.println("Response packet: " + responsePacketString);
                 }catch (IOException e){
                     throw new RuntimeException(e);
+                }
+                String[] elevatorSubsystemParts = responsePacketString.split(",");
+                int i = 0;
+                while(i < elevatorSubsystemParts.length - 5){
+                    //System.out.println(elevatorSubsystemParts.length);
+                    int elevatorId = Integer.parseInt(elevatorSubsystemParts[i].trim());
+                    int currentFloor = Integer.parseInt(elevatorSubsystemParts[3+i].trim());
+                    //System.out.println("Elevator " + elevatorId + " lamp displays " + currentFloor);
+                    i += 5;
+                    //System.out.println("I is " + i);
                 }
 
             }

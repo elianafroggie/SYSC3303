@@ -89,7 +89,6 @@ public class ElevatorSubsystem {
         return packet;
     }
 
-    public void run(){
-    }
+    public void run(){}
 
 }

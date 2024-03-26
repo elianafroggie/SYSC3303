@@ -25,7 +25,7 @@ public class Scheduler {
 
     public void scheduleRequests(){
         byte floorData[] = new byte[20];
-        byte elevatorData[] = new byte[50];
+        byte elevatorData[] = new byte[100];
         while(true){
             // Receive packet from floor with an elevator request
             try {
@@ -66,8 +66,8 @@ public class Scheduler {
 
             // Notify floor subsystem that it can continue sending requests
             try{
-                byte notify[] = new byte[]{0,0,0,0};
-                DatagramPacket notifyPacket = new DatagramPacket(notify, 4, floorPacket.getAddress(), floorPacket.getPort());
+                //byte notify[] = new byte[]{0,0,0,0};
+                DatagramPacket notifyPacket = new DatagramPacket(elevatorData, elevatorData.length, floorPacket.getAddress(), floorPacket.getPort());
                 sendSocket.send(notifyPacket);
             }catch (IOException e){
                 throw new RuntimeException(e);
@@ -81,7 +81,6 @@ public class Scheduler {
         String[] floorParts = floorDataString.split(",");
 
         int pickupRequest = Integer.parseInt(floorParts[0].trim());
-        //System.out.println("Pickup request: " + pickupRequest);
         String directionRequest = floorParts[1].trim();
         int destinationRequest = Integer.parseInt(floorParts[2].trim());
 
@@ -89,9 +88,9 @@ public class Scheduler {
         ArrayList<Integer> numStopList = new ArrayList<>();
 
         // Big ol scheduler, each elevator string contains 5 elements (elevatorString size will be multiple of 5)
-        for(int i = 0; i < elevatorSubsystemParts.length; i += 5){
+        for(int i = 0; i < elevatorSubsystemParts.length - 1; i += 5){
             // For each of the elevators, parse and see if it looks like a good spot to add a stop
-            //System.out.println(elevatorDataString);
+            //System.out.println(elevatorSubsystemParts.length);
             int elevatorId = Integer.parseInt(elevatorSubsystemParts[i].trim());
             String state = elevatorSubsystemParts[1+i].trim();
             String direction = elevatorSubsystemParts[2+i].trim();
