@@ -45,6 +45,8 @@ public class SchedulerTest {
 
             scheduler.scheduleRequests();
 
+            //Add Asserts here
+
         } catch (IOException e) {
             fail("Exception occurred: " + e.getMessage());
         } finally {
