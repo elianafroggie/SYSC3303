@@ -22,17 +22,7 @@ public class Elevator implements Runnable {
     private List<Integer> nextUpList = new ArrayList<>();
     private String direction = "";
 
-    // Defining constants for different error types
-    // Represents a no error condition
-    private final String NO_ERROR = "0";
-
-    // Represents a temporary or transient error condition
-    private final String TRANSIENT_ERROR = "1";
-
-    // Represents a permanent or critical error condition
-    private final String PERMANENT_ERROR = "2";
-
-    private final int MAX_FLOOR = 10;
+    private final int MAX_FLOOR = 12;
 
     private boolean doorOpen;
 
@@ -303,28 +293,5 @@ public class Elevator implements Runnable {
         return direction;
     }
 
-    public void handleError(String error, boolean doorOpen, int destinationFloor) {
-        int elevatorId = 2;
-        switch(error) {
-            case NO_ERROR:
-                if(destinationFloor > currentFloor) {
-                    currentState = elevatorState.WAITING;
-                    System.out.println("Elevator " + elevatorId + " is moving up");
-                }
-                if(destinationFloor < currentFloor) {
-                    currentState = elevatorState.WAITING;
-                    System.out.println("Elevator is moving down");
-                } else {
-                    currentState = elevatorState.WAITING;
-                    System.out.println("Idle State");
-                }
-                if(doorOpen) {
-                    System.out.println("Door Open");
-                } else {
-                    System.out.println("Door Closed");
-                }
-                break;
-        }
-    }
-
 }
+
