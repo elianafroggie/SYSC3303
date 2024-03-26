@@ -70,7 +70,7 @@ public class Floor {
     /*
     Constructs message out of data read from csv file and converts it to bytes to be sent to the scheduler
      */
-    private DatagramPacket constructRequestPacket(int floor, String direction, int destination){
+    DatagramPacket constructRequestPacket(int floor, String direction, int destination){
         String messageToScheduler = floor + "," + direction + "," + destination;
         byte[] data = messageToScheduler.getBytes();
         try{
@@ -84,7 +84,7 @@ public class Floor {
     /*
     Usage is obvious, sends packet to scheduler
      */
-    private void sendRequestPacket(DatagramPacket sendRequest){
+    void sendRequestPacket(DatagramPacket sendRequest){
         try{
             toFromSchedulerSocket.send(sendRequest);
             System.out.println("Packet Sent from Floor to Scheduler: " + new String(sendRequest.getData()));
