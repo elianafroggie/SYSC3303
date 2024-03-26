@@ -9,20 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SchedulerTest {
 
-    private Scheduler scheduler;
-    private static final int PORT_NUMBER = 4018; // Port number to be used for the DatagramSocket
+    private Scheduler scheduler = new Scheduler();
+    private static final int PORT_NUMBER = 2025; // Port number to be used for the DatagramSocket
 
-    @BeforeEach
-    public void setUp() {
-        scheduler = new Scheduler();
-        // Set the DatagramSocket ports to 4018 for testing
-        try {
-            scheduler.receiveSocket = new DatagramSocket(PORT_NUMBER);
-            scheduler.sendSocket = new DatagramSocket(PORT_NUMBER + 1);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void testConstructor() {
@@ -56,11 +45,10 @@ public class SchedulerTest {
 
             scheduler.scheduleRequests();
 
-            // You can add assertions here based on the expected behavior of the method
-            // For example, you can verify that certain packets were sent or received
         } catch (IOException e) {
             fail("Exception occurred: " + e.getMessage());
         } finally {
+            scheduler.scheduleStop("1,Up,5", "1,WAITING,Up,3,0,2,MOVING,Down,4,1");
             // Restore System.out
             System.setOut(originalOut);
         }

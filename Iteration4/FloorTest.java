@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FloorTest {
 
     private Floor floor;
-    private static final int PORT_NUMBER = 25; // Port number to be used for the DatagramSocket
+    private int PORT_NUMBER = 2025; // Port number to be used for the DatagramSocket
 
     @BeforeEach
     public void setUp() {
@@ -16,6 +16,7 @@ public class FloorTest {
         // Set the DatagramSocket port to 4018
         try {
             floor.toFromSchedulerSocket = new DatagramSocket(PORT_NUMBER);
+            PORT_NUMBER += 1;
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -59,7 +60,7 @@ public class FloorTest {
         assertNotNull(packet);
         assertEquals("1,UP,5", new String(packet.getData()));
         assertEquals(InetAddress.getLocalHost(), packet.getAddress());
-        assertEquals(PORT_NUMBER, packet.getPort());
+        assertEquals(2025, packet.getPort());
     }
 
     @Test

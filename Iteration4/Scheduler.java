@@ -13,10 +13,10 @@ public class Scheduler {
 
     public Scheduler() {
         try {
-            // Construct a datagram socket and bind it to port 25 and use it to forward packets
+            // Construct a datagram socket and bind it to port 2025 and use it to forward packets
             // between client and server
             sendSocket = new DatagramSocket();
-            receiveSocket = new DatagramSocket(25);
+            receiveSocket = new DatagramSocket(2025);
         } catch (SocketException se) {
             se.printStackTrace();
             System.exit(1);
@@ -40,7 +40,7 @@ public class Scheduler {
             // Send request for current elevator states to elevatorSubsystem
             byte request[] = new byte[]{0,0,0,0};
             try{
-                DatagramPacket requestPacket = new DatagramPacket(request, 4, InetAddress.getLocalHost(), 69);
+                DatagramPacket requestPacket = new DatagramPacket(request, 4, InetAddress.getLocalHost(), 2069);
                 sendSocket.send(requestPacket);
             }catch (IOException e){
                 throw new RuntimeException(e);
@@ -58,7 +58,7 @@ public class Scheduler {
             // Send elevatorSubsystem the elevator that will make the stop and the information
             try{
                 byte stopRequest[] = scheduleStop(floorDataString, elevatorDataString).getBytes();
-                DatagramPacket stopRequestPacket = new DatagramPacket(stopRequest, stopRequest.length, InetAddress.getLocalHost(), 69);
+                DatagramPacket stopRequestPacket = new DatagramPacket(stopRequest, stopRequest.length, InetAddress.getLocalHost(), 2069);
                 sendSocket.send(stopRequestPacket);
             }catch (IOException e){
                 throw new RuntimeException(e);

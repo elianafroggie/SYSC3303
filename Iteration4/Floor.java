@@ -25,7 +25,7 @@ public class Floor {
 
     /*
     This method will parse the csv (which is separated by commas) and will send each request to
-    the destination port which is the receiveSocket port in the scheduler class, in this case 25
+    the destination port which is the receiveSocket port in the scheduler class, in this case 2025
      */
     public void readCSV(String csvFile, String delimiter){
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(csvFile))){
@@ -74,7 +74,7 @@ public class Floor {
         String messageToScheduler = floor + "," + direction + "," + destination;
         byte[] data = messageToScheduler.getBytes();
         try{
-            return new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 25);
+            return new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 2025);
         }catch(IOException e){
             e.printStackTrace();
             return null;
