@@ -237,12 +237,12 @@ public class Elevator implements Runnable {
     }
 
     public void handleError(String error, boolean doorOpen, int destinationFloor) {
-        int elevatorNum = 2;
+        int elevatorId = 2;
         switch(error) {
             case NO_ERROR:
                 if(destinationFloor > currentFloor) {
                     currentState = elevatorState.WAITING;
-                    System.out.println("Elevator " + elevatorNum + " is moving up");
+                    System.out.println("Elevator " + elevatorId + " is moving up");
                 }
                 if(destinationFloor < currentFloor) {
                     currentState = elevatorState.WAITING;
