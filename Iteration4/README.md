@@ -19,12 +19,22 @@ Step-by-Step Setup Instructions:
 (4) Open and View the JAVA Test file and Execute it.
 ** Note: This project is built in IntelliJ using the Maven build system, if copying and pasting files ensure that you use this build system
 
-Actions from Members for this iteration:
-Group Roles:
-Hemilkumar Patel: Add error detection via Elevator_with_Error_Detection.java and Floor_with_Error_Detection.java, wrote testing framework ElevatorTest.java, created diagrams classDiagram.png, sequence diagram.png and state machine.png, README.md
+## Actions from Members for this iteration:
+### Hemilkumar Patel: 
+- Add error detection via Elevator_with_Error_Detection.java and Floor_with_Error_Detection.java
+- Wrote testing framework ElevatorTest.java
+- Created diagrams classDiagram.png, sequence diagram.png and state machine.png
+- README.md
 
-Ben Mostafa: Wrote testing framework FloorTest.java and SchedulerTest.java, README.md
+### Ben Mostafa: 
+- Wrote testing framework FloorTest.java and SchedulerTest.java
+- README.md
 
-Cholen Premjeyanth: Scheduler.java, UML Timing Diagram, and README.md
+### Cholen Premjeyanth: 
+- Created UML Timing Diagram
+- README.md
 
-Eliana Schartner: Scheduler.java, Elevator.java, JUnit Test files, and README.md
+### Eliana Schartner: 
+- Created code for elevator, wrote Main.java, Floor.java, Scheduler.java, Elevator.java and ElevatorSubsystem.java
+- data.csv
+- README.md
