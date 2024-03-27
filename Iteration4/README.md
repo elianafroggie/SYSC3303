@@ -32,6 +32,7 @@ Step-by-Step Setup Instructions:
 
 ### Cholen Premjeyanth: 
 - Created UML Timing Diagram
+- Assited with error detection
 - README.md
 
 ### Eliana Schartner: 
