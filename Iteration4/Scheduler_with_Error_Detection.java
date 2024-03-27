@@ -124,7 +124,7 @@ public class Scheduler {
     // method where the logic is detected if an elevator takes a long time to reach a floor
     // if we do detect a fault, then we will forcefully shut down the particular elevator
     // the logic is implemented through timers and monitoring the elevator states
-    public void detectHandleFaults(String elevatorDataString) {
+    public void detectHandleFaults(String elevatorDataString, Elevator[] elevators) {
 
         // parse the elevator data string in order to extract the needed information such as "elevatorID, state, currentFloor, numStops"
         String[] elevatorSubsystemParts = elevatorDataString.split(",");
@@ -137,9 +137,9 @@ public class Scheduler {
         // check condition to see if the elevator is stuck or not functioning as we want it to according to its state
         if (state.equals("MOVING_DOWN") || state.equals("MOVING_UP")){
 
-            long takenTime = System.currentTimeMillis() - elevator.getStartTime();
+            long takenTime = System.currentTimeMillis() - elevators[elevatorId].getStartTime();;
 
-            int targetFloor = elevator.getTargetFloor();
+            int targetFloor = elevators[elevatorId].getTargetFloor();
 
             int distanceTarget = Math.abs(currentFloor - targetFloor);
 
@@ -184,5 +184,9 @@ public class Scheduler {
 
     }
 }
+
+
+
+
 
 
