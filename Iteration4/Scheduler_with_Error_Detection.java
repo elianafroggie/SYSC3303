@@ -148,7 +148,7 @@ public class Scheduler {
 
             if (takenTime > expectedTime + threshold) {
                 // If the elevator is taking too long, we can shut it down
-                powerOffElevator(elevatorId);
+                powerOffElevator(elevatorId, elevators);
             }
         }
     }
@@ -170,10 +170,7 @@ public class Scheduler {
     }
 
     // Method to shut down the elevators
-    private void powerOffElevator(int elevatorId) {
-        ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem(numElevators);
-
-        Elevator[] elevators = elevatorSubsystem.elevators;
+    private void powerOffElevator(int elevatorId, Elevator[] elevators) {
 
         // check if the elevatorID doesn't exceed the length of the elevators array, and the elevatorID isn't negative
         if (elevatorId < elevators.length && elevatorId >= 0) {
@@ -184,9 +181,4 @@ public class Scheduler {
 
     }
 }
-
-
-
-
-
 
