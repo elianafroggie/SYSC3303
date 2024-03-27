@@ -5,7 +5,7 @@ import java.net.SocketException;
 import java.util.List;
 
 public class ElevatorSubsystem {
-    private final Elevator[] elevators;
+    public final Elevator[] elevators;
     DatagramSocket sendSocket, receiveSocket;
     DatagramPacket sendPacket, receivePacket;
 
