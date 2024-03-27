@@ -21,9 +21,9 @@ Step-by-Step Setup Instructions:
 
 Actions from Members for this iteration:
 Group Roles:
-Hemilkumar Patel: Elevator.java, Unit Testing and README.md
+Hemilkumar Patel: Add error detection via Elevator_with_Error_Detection.java and Floor_with_Error_Detection.java, wrote testing framework ElevatorTest.java, created diagrams classDiagram.png, sequence diagram.png and state machine.png, README.md
 
-Ben Mostafa: Floor.java, FloorSystem.java, Unit Testing and README.md, 
+Ben Mostafa: Wrote testing framework FloorTest.java and SchedulerTest.java, README.md
 
 Cholen Premjeyanth: Scheduler.java, UML Timing Diagram, and README.md
 
