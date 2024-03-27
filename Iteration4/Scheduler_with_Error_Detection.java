@@ -95,10 +95,10 @@ public class Scheduler {
             // For each of the elevators, parse and see if it looks like a good spot to add a stop
             //System.out.println(elevatorDataString);
             int elevatorId = Integer.parseInt(elevatorSubsystemParts[i].trim());
-            String state = elevatorSubsystemParts[1+i].trim();
-            String direction = elevatorSubsystemParts[2+i].trim();
-            int currentFloor = Integer.parseInt(elevatorSubsystemParts[3+i].trim());
-            int numStops = Integer.parseInt(elevatorSubsystemParts[4+i].trim());
+            String state = elevatorSubsystemParts[i+1].trim();
+            String direction = elevatorSubsystemParts[i+2].trim();
+            int currentFloor = Integer.parseInt(elevatorSubsystemParts[i+3].trim());
+            int numStops = Integer.parseInt(elevatorSubsystemParts[i+4].trim());
             numStopList.add(numStops);
 
             if(state.equals("WAITING") && numStops == 0){
