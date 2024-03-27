@@ -126,22 +126,16 @@ public class Scheduler {
     // the logic is implemented through timers and monitoring the elevator states
     public void detectHandleFaults(String elevatorDataString) {
 
-        // parse the elevator data string in order to extract the needed information such as "elevatorID, state, direction, currentFloor, numStops"
+        // parse the elevator data string in order to extract the needed information such as "elevatorID, state, currentFloor, numStops"
         String[] elevatorSubsystemParts = elevatorDataString.split(",");
 
         int elevatorId = Integer.parseInt(elevatorSubsystemParts[0].trim());
         String state = elevatorSubsystemParts[1].trim();
-        String direction = elevatorSubsystemParts[2].trim();
         int currentFloor = Integer.parseInt(elevatorSubsystemParts[3].trim());
         int numStops = Integer.parseInt(elevatorSubsystemParts[4].trim());
 
         // check condition to see if the elevator is stuck or not functioning as we want it to according to its state
         if (state.equals("MOVING_DOWN") || state.equals("MOVING_UP")){
-
-            ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem(numElevators);
-
-            Elevator[] elevators = elevatorSubsystem.elevators;
-            Elevator elevator = elevators[elevatorId];
 
             long takenTime = System.currentTimeMillis() - elevator.getStartTime();
 
