@@ -32,7 +32,7 @@ public class Main {
                 String state = elevatorSubsystemParts[1+i].trim();
                 int currentFloor = Integer.parseInt(elevatorSubsystemParts[3+i].trim());
                 int passengers = Integer.parseInt(elevatorSubsystemParts[5+i].trim());
-                elevatorGUI.updateElevatorLocation(elevatorId, currentFloor, state);
+                elevatorGUI.updateElevatorLocation(elevatorId, currentFloor, state, passengers);
             }
 
             try {Thread.sleep(1000);
