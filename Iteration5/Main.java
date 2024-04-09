@@ -7,7 +7,7 @@ public class Main {
         // Instantiate objects of the floor, scheduler and elevatorSubsystem
         Floor floor = new Floor();
         Scheduler host = new Scheduler();
-        ElevatorSubsystem subsystem = new ElevatorSubsystem(2);
+        ElevatorSubsystem subsystem = new ElevatorSubsystem(4);
 
         // Instantiates the GUIForElevator object with 4 elevators, which sets up the GUI for displaying the real-time info about each elevator present in the control system
         GUIForElevator elevatorGUI = new GUIForElevator(4);
