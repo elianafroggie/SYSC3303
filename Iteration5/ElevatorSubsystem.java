@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.List;
@@ -5,6 +7,7 @@ import java.util.List;
 public class ElevatorSubsystem {
     private final Elevator[] elevators;
     DatagramSocket sendSocket, receiveSocket;
+    DatagramPacket sendPacket, receivePacket;
 
     public ElevatorSubsystem(int numElevators) {
         elevators = new Elevator[numElevators];
@@ -13,73 +16,82 @@ public class ElevatorSubsystem {
             Thread elevatorThread = new Thread(elevators[i]);
             elevatorThread.start();
         }
-    }
-
-    public void addStops(int pickup, int destination, String direction, int elevatorId, int passIn) {
-        if (elevatorId >= 0 && elevatorId < elevators.length) {
-            Elevator elevator = elevators[elevatorId];
-            elevator.addStops(pickup, destination, direction, passIn);
-    }
-    }
-
-    public Elevator.elevatorState getState(int elevatorId) {
-        if (elevatorId >= 0 && elevatorId < elevators.length) {
-            Elevator elevator = elevators[elevatorId];
-            System.out.println(elevator.getState() + " on floor " + elevator.currentFloor + " going " + elevator.getDirection());
-            return elevator.getState();
-        } else {
-            // Handle invalid elevator ID, such as returning a default status or throwing an exception
-            return null; // Example: returning null for an invalid ID
+        try {
+            // Construct DatagramSockets for sending/receiving. The server will receive packets from port 69.
+            sendSocket = new DatagramSocket();
+            receiveSocket = new DatagramSocket(69);
+        } catch (SocketException se) {
+            se.printStackTrace();
+            System.exit(1);
         }
     }
 
-    public List<Integer> getStopList(int elevatorId){
+    public void sendReceiveRequests() {
+        // Initialize the elevators
+        byte data[] = new byte[50];
+        while (true) {
+            // Wait for packet to be sent from scheduler requesting current elevator state
+            receivePacket = new DatagramPacket(data, data.length);
+            try {
+                receiveSocket.receive(receivePacket);
+            } catch (IOException e) {
+                System.out.print("IO Exception: likely:");
+                System.out.println("Timed Out.\n" + e);
+                e.printStackTrace();
+                System.exit(1);
+            }
+
+            // Send current elevator state
+            if (data[0] == 0 && data[1] == 0) {
+                byte[] info = getInfo().getBytes();
+                sendPacket = new DatagramPacket(info, info.length, receivePacket.getAddress(), 25);
+                try {
+                    sendSocket.send(sendPacket);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+            } else {
+                int length = receivePacket.getLength();
+                // Convert the received data byte array to a string
+                String receivedData = new String(data, 0, length);
+
+                // Split the received string by comma to get individual components
+                String[] parts = receivedData.split(",");
+
+                // Extract the elevator ID, pickup floor, destination floor, and direction
+                int elevatorId = Integer.parseInt(parts[3].trim());
+                int pickupFloor = Integer.parseInt(parts[0].trim());
+                int destinationFloor = Integer.parseInt(parts[1].trim());
+                // EDIT THE NEXT LINE WITH THE LINE NUMBER
+                //int passIn = Integer.parseInt(parts[1].trim());
+                int passIn = 2;
+                String direction = parts[2].trim();
+                addStops(pickupFloor, destinationFloor, direction, elevatorId, passIn);
+            }
+
+        }
+    }
+    public void addStops(int pickup, int destination, String direction, int elevatorId, int passIn){
         if (elevatorId >= 0 && elevatorId < elevators.length) {
             Elevator elevator = elevators[elevatorId];
-            System.out.println(elevator.getStopList());
-            return elevator.getStopList();
-        } else {
-            // Handle invalid elevator ID, such as returning a default status or throwing an exception
-            return null; // Example: returning null for an invalid ID
+            try{
+                elevator.addStops(pickup, destination, direction, passIn);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
-
     }
-    public String getDirection(int elevatorId){
-        if (elevatorId >= 0 && elevatorId < elevators.length) {
-            Elevator elevator = elevators[elevatorId];
-            System.out.println(elevator.getDirection());
-            return elevator.getDirection();
-        } else {
-            // Handle invalid elevator ID, such as returning a default status or throwing an exception
-            return null; // Example: returning null for an invalid ID
+
+    public String getInfo(){
+        String packet = "";
+        for(int i = 0; i < elevators.length; i++){
+            String string = elevators[i].getInfo();
+            packet = packet + string + ",";
         }
-
-    }
-    public void receiveAndScheduleRequests() {
-
-
-
+        return packet;
     }
 
-    public void run(){
+    public void run(){}
 
-    }
-
-    public static void main(String[] args) {
-        int numElevators = 2; // Number of elevators
-        ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem(numElevators);
-        //elevatorSubsystem.receiveAndScheduleRequests();
-
-
-        // Example usage: control elevator 0
-        elevatorSubsystem.addStops(1,3,"Up",0, 2);
-        elevatorSubsystem.addStops(2,4,"Up", 0, 1);
-        elevatorSubsystem.getStopList(0);
-        elevatorSubsystem.getState(0);
-
-        elevatorSubsystem.addStops(1,3,"Up",1, 3);
-        elevatorSubsystem.addStops(2,4,"Up", 1, 0);
-        elevatorSubsystem.getStopList(1);
-        elevatorSubsystem.getState(1);
-    }
 }

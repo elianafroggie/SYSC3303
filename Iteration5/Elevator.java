@@ -1,39 +1,61 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Elevator implements Runnable {
-    protected enum elevatorState {
+    public enum elevatorState {
         DOORS_OPENING,
         DOORS_CLOSING,
         MOVING_UP,
         MOVING_DOWN,
-        WAITING;
+        WAITING
     }
     private final int elevatorId;
     private elevatorState currentState;
-    int currentFloor = 1;
+    int currentFloor;
     private final ElevatorSubsystem elevatorSubsystem;
-    private List<Integer> stopList = new ArrayList<>();
-    private List<Integer> nextDownList = new ArrayList<>();
-    private List<Integer> nextUpList = new ArrayList<>();
-    private List<Passenger> passengers = new ArrayList<>();
-    private String direction = "";
-    private int currentPassengerCount = 0; // Current number of passengers
-    private final int maxPassengerCapacity = 8; // Maximum passenger capacity
+    private List<Integer> stopList;
+    private List<Integer> nextDownList;
+    private List<Integer> nextUpList;
+    private List<Passenger> passengers;
+    private String direction = "Null";
+    private int currentPassengerCount;
+    private final int maxPassengerCapacity;
 
 
     public Elevator(int elevatorId, ElevatorSubsystem elevatorSubsystem) {
         this.elevatorId = elevatorId;
         this.elevatorSubsystem = elevatorSubsystem;
+        this.stopList = new ArrayList<>();
+        this.nextDownList = new ArrayList<>();
+        this.nextUpList = new ArrayList<>();
+        this.passengers = new ArrayList<>();
+        this.currentPassengerCount = 0;
+        this.maxPassengerCapacity = 8;
         currentState = elevatorState.WAITING;
+        currentFloor = 1;
+        System.out.println("Elevator created: " + this.elevatorId);
     }
 
     @Override
     public void run() {
-        // Simulate elevator operations
+        System.out.println("Running");
+        // Simulate elevator operations im not explaining it just read it
         while (true) {
+            stopList = getStopList();
+            nextDownList = getNextDownList();
+            nextUpList = getNextUpList();
             if (currentState == elevatorState.WAITING) {
+                setState(elevatorState.WAITING);
+                if(stopList.isEmpty()){
+                    if (!nextUpList.isEmpty() && nextUpList.size() >= nextDownList.size()) {
+                        stopList.addAll(nextUpList);
+                        nextUpList.clear();
+                        System.out.println(stopList);
+                    } else if(!nextDownList.isEmpty()){
+                        stopList.addAll(nextDownList);
+                        nextDownList.clear();
+                    }
+                }
+
                 if (stopList.size() >= 2) {
                     if (stopList.get(0) > stopList.get(1)) {
                         if (currentFloor == stopList.getFirst()) {
@@ -51,10 +73,10 @@ public class Elevator implements Runnable {
                                     }
                                 }
                             }
-                            //System.out.println("Doors opening on floor: " + currentFloor);
                         }
                         if (currentFloor > stopList.getFirst()) {
                             currentState = elevatorState.MOVING_DOWN;
+
                         }
                         if (currentFloor < stopList.getFirst()) {
                             currentState = elevatorState.MOVING_UP;
@@ -79,31 +101,19 @@ public class Elevator implements Runnable {
                             }
                             //System.out.println("Doors opening on floor: " + currentFloor);
                         }
-                        if (currentFloor < stopList.getFirst()) {
+                        if (currentFloor > stopList.getFirst()) {
                             currentState = elevatorState.MOVING_DOWN;
                         }
-                        if (currentFloor > stopList.getFirst()) {
+                        if (currentFloor < stopList.getFirst()) {
                             currentState = elevatorState.MOVING_UP;
                         }
                         direction = "Up";
                     }
-                } else {
-                    if (nextUpList.isEmpty() && nextDownList.isEmpty()) {
-                        currentState = elevatorState.WAITING;
-                        direction = "";
-                    }
-                    if (nextUpList.size() >= nextDownList.size()) {
-                        stopList = new ArrayList<>(nextUpList);
-                        nextUpList.clear();
-                        direction = "Up";
-                    } else {
-                        stopList = new ArrayList<>(nextDownList);
-                        nextDownList.clear();
-                        direction = "Down";
-                    }
                 }
             }
+
             if (currentState == elevatorState.DOORS_OPENING) {
+                setState(elevatorState.DOORS_OPENING);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -126,6 +136,7 @@ public class Elevator implements Runnable {
                 currentState = elevatorState.DOORS_CLOSING;
             }
             if (currentState == elevatorState.DOORS_CLOSING) {
+                setState(elevatorState.DOORS_CLOSING);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -137,30 +148,27 @@ public class Elevator implements Runnable {
                 if(stopList.size()>1) {
                     if (stopList.get(0) < stopList.get(1) || currentFloor < stopList.getFirst()) {
                         currentState = elevatorState.MOVING_UP;
-                        direction = "Up";
                     }
                     if (stopList.get(0) > stopList.get(1)) {
                         currentState = elevatorState.MOVING_DOWN;
-                        direction = "Down";
                     }
                 }
                 if(stopList.size() == 1){
                     //System.out.println("Size is 1");
                     if(stopList.getFirst() > currentFloor){
                         currentState = elevatorState.MOVING_UP;
-                        direction = "Up";
                     }
                     if(stopList.getFirst() < currentFloor){
                         currentState = elevatorState.MOVING_DOWN;
-                        direction = "Down";
                     }
                 }
                 if(stopList.isEmpty()){
                     currentState = elevatorState.WAITING;
-                    direction = "";
+                    direction = "Null";
                 }
             }
             if (currentState == elevatorState.MOVING_UP) {
+                setState(elevatorState.MOVING_UP);
                 System.out.println("Elevator " + this.elevatorId + " : Moving up");
                 while (currentFloor < stopList.getFirst()) {
                     try {
@@ -169,8 +177,8 @@ public class Elevator implements Runnable {
                         throw new RuntimeException(e);
                     }
                     currentFloor += 1;
+                    setCurrentFloor(currentFloor);
                 }
-                //stopList.removeFirst();
                 currentState = elevatorState.DOORS_OPENING;
                 Iterator<Passenger> iterator = passengers.iterator();
                 while (iterator.hasNext()) {
@@ -187,6 +195,7 @@ public class Elevator implements Runnable {
                 }
             }
             if (currentState == elevatorState.MOVING_DOWN) {
+                setState(elevatorState.MOVING_DOWN);
                 System.out.println("Elevator " + this.elevatorId + " : Moving Down");
                 while (currentFloor > stopList.getFirst()) {
                     try {
@@ -195,8 +204,8 @@ public class Elevator implements Runnable {
                         throw new RuntimeException(e);
                     }
                     currentFloor -= 1;
+                    setCurrentFloor(currentFloor);
                 }
-                //stopList.removeFirst();
                 currentState = elevatorState.DOORS_OPENING;
                 Iterator<Passenger> iterator = passengers.iterator();
                 while (iterator.hasNext()) {
@@ -217,14 +226,13 @@ public class Elevator implements Runnable {
 
     }
 
-    public void addStops(int pickupFloor, int destinationFloor, String direction, int passIn){
-        int index = 0;
+    public synchronized void addStops(int pickupFloor, int destinationFloor, String direction, int passIn){
         // This is the logic for adding floors to the floor list of stops for the elevator
         // Currently I have decided that starvation is a myth from big tech
         if((getCurrentPassengerCount() + passIn) > getMaxPassengerCapacity()) {
             System.out.println("Elevator " + this.elevatorId + " is at full capacity. Cannot add more stops.");
         }
-        else if(currentState == elevatorState.WAITING){
+        else if(currentState == elevatorState.WAITING && stopList.isEmpty() && nextDownList.isEmpty() && nextUpList.isEmpty()){
             stopList.add(pickupFloor);
             stopList.add(destinationFloor);
             int i = 0;
@@ -234,11 +242,29 @@ public class Elevator implements Runnable {
                 currentPassengerCount++;
             }
         }
-        else if (direction.equals("Up") && this.direction.equals("Up") && currentFloor <= pickupFloor) {
-            while (index < stopList.size() && stopList.get(index) < pickupFloor) {
-                index++;
+        else if (direction.equals("Up") && this.direction.equals("Up") &&
+                (currentFloor <= pickupFloor || currentFloor >= stopList.getFirst())) {
+            stopList.add(pickupFloor);
+            stopList.add(destinationFloor);
+            Collections.sort(stopList);
+            HashSet<Integer> set = new HashSet<>(stopList);
+            stopList.clear();
+            stopList.addAll(set);
+            int i = 0;
+            while (passIn > i) {
+                passengers.add(new Passenger(pickupFloor, destinationFloor));
+                i++;
+                currentPassengerCount++;
             }
-            stopList.add(index, pickupFloor);
+        }
+        else if (direction.equals("Down") && (this.direction.equals("Down") &&
+                (currentFloor >= pickupFloor || currentFloor <= stopList.getFirst()))){
+            stopList.add(pickupFloor);
+            stopList.add(destinationFloor);
+            HashSet<Integer> set = new HashSet<>(stopList);
+            stopList.clear();
+            stopList.addAll(set);
+            Collections.sort(stopList, Comparator.reverseOrder());
             int i = 0;
             while (passIn > i) {
                 passengers.add(new Passenger(pickupFloor, destinationFloor));
@@ -246,74 +272,52 @@ public class Elevator implements Runnable {
                 currentPassengerCount++;
             }
 
-            while (index < stopList.size() && stopList.get(index) < destinationFloor) {
-                index++;
-            }
-            stopList.add(index, destinationFloor);
-        }
-        else if (direction.equals("Down") && (this.direction.equals("Down") && currentFloor >= pickupFloor)){
-            while (index < stopList.size() && stopList.get(index) > pickupFloor) {
-                index++;
-            }
-            stopList.add(index, pickupFloor);
-            int i = 0;
-            while (passIn > i) {
-                passengers.add(new Passenger(pickupFloor, destinationFloor));
-                i++;
-                currentPassengerCount++;
-            }
-
-            while (index < stopList.size() && stopList.get(index) < destinationFloor) {
-                index++;
-            }
-            stopList.add(index, destinationFloor);
-        }
-        else{
+        } else{
             if (direction.equals("Up")) {
-                while (index < nextUpList.size() && nextUpList.get(index) < pickupFloor) {
-                    index++;
-                }
-                nextUpList.add(index, pickupFloor);
+                nextUpList.add(pickupFloor);
+                nextUpList.add(destinationFloor);
+                Collections.sort(nextUpList);
+                HashSet<Integer> set = new HashSet<>(nextUpList);
+                nextUpList.clear();
+                nextUpList.addAll(set);
                 int i = 0;
                 while (passIn > i) {
                     passengers.add(new Passenger(pickupFloor, destinationFloor));
                     i++;
                     currentPassengerCount++;
                 }
-                while (index < nextUpList.size() && nextUpList.get(index) < destinationFloor) {
-                    index++;
-                }
-                nextUpList.add(index, destinationFloor);
             }
-            if (direction.equals("Down")) {
-                while (index < nextDownList.size() && nextDownList.get(index) > pickupFloor) {
-                    index++;
-                }
-                nextDownList.add(index, pickupFloor);
+            else if (direction.equals("Down")) {
+                nextDownList.add(pickupFloor);
+                nextDownList.add(destinationFloor);
+                HashSet<Integer> set = new HashSet<>(nextDownList);
+                nextDownList.clear();
+                nextDownList.addAll(set);
+                Collections.sort(nextDownList, Comparator.reverseOrder());
                 int i = 0;
                 while (passIn > i) {
                     passengers.add(new Passenger(pickupFloor, destinationFloor));
                     i++;
                     currentPassengerCount++;
                 }
-
-                while (index < nextDownList.size() && nextDownList.get(index) < destinationFloor) {
-                    index++;
-                }
-                nextDownList.add(index, destinationFloor);
             } else {
                 System.out.println("Unable to add request to queue");
             }
         }
         System.out.println("Request for elevator added to elevator queue. Current passenger count: " + getCurrentPassengerCount());
+        //System.out.println(stopList + "is size: " + stopList.size());
     }
-    public elevatorState getState() {
+    public synchronized elevatorState getState() {
         return currentState;
     }
-
-    public List<Integer> getStopList(){
+    public synchronized void setState(elevatorState state){currentState = state;}
+    public synchronized List<Integer> getStopList(){
         return stopList;
     }
+    public synchronized List<Integer> getNextUpList(){return nextUpList;}
+    public synchronized List<Integer> getNextDownList(){return nextDownList;}
+    public synchronized int getCurrentFloor(){return currentFloor;}
+    public synchronized void setCurrentFloor(int floor){currentFloor = floor;}
     public String getDirection(){
         return direction;
     }
@@ -330,5 +334,10 @@ public class Elevator implements Runnable {
             currentPassengerCount = 0;
         }
         System.out.println("1 passenger has exited. Current passenger count: " + getCurrentPassengerCount());
+    }
+
+    public synchronized String getInfo(){
+        int numberOfStops = stopList.size() + nextUpList.size() + nextDownList.size();
+        return elevatorId + "," + getState() + "," + getDirection() + "," + getCurrentFloor() + "," + numberOfStops;
     }
 }
