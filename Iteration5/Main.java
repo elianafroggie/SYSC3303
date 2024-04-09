@@ -1,4 +1,6 @@
-package org.example;
+//package org.example;
+
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,15 +23,19 @@ public class Main {
         subsystemThread.start();
 
         // Simulation of the movement of the elevators over time, and performing an iteration through the time in order to update the elevator positions accurately
-        for (int index = 0; index < 22; index++) {
+        while(true) {
+            String elevatorDataString = subsystem.getInfo();
+            String[] elevatorSubsystemParts = elevatorDataString.split(",");
 
-            // Updating the specific position of each elevator at the current timestamp
-            // Use the modulo operation in order to loop through the elevators, and obtaining the index as a result
-            elevatorGUI.updateElevatorLocation(index % 4, index);
+            for(int i = 0; i < elevatorSubsystemParts.length - 1; i += 6){
+                int elevatorId = Integer.parseInt(elevatorSubsystemParts[i].trim());
+                String state = elevatorSubsystemParts[1+i].trim();
+                int currentFloor = Integer.parseInt(elevatorSubsystemParts[3+i].trim());
+                int passengers = Integer.parseInt(elevatorSubsystemParts[5+i].trim());
+                elevatorGUI.updateElevatorLocation(elevatorId, currentFloor, state);
+            }
 
-            try {
-                // Pause the execution for about 1.5 seconds
-                Thread.sleep(1500);
+            try {Thread.sleep(1000);
 
             } catch (InterruptedException interruptedException) {
                 // Print any interrupted exceptions that can occur during the thread sleep time of 1500
