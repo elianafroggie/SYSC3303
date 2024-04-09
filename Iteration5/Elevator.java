@@ -333,7 +333,7 @@ public class Elevator implements Runnable {
         if(currentPassengerCount < 0) {
             currentPassengerCount = 0;
         }
-        System.out.println("1 passenger has exited. Current passenger count: " + getCurrentPassengerCount());
+        System.out.println("1 passenger has exited Elevator: " + this.elevatorId + ". Current passenger count: " + getCurrentPassengerCount());
     }
 
     public synchronized String getInfo(){
