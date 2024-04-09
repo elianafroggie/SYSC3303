@@ -1,4 +1,4 @@
-package org.example;
+//package org.example;
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,8 +30,8 @@ public class GUIForElevator extends JFrame {
     }
 
     // Updates the position of the elevator at the specific index level to the given current floor
-    public void updateElevatorLocation(int elevatorInd, int currentFloor) {
-        ((ElevatorPanel)elevatorPanels[elevatorInd]).updatingPosition(currentFloor);
+    public void updateElevatorLocation(int elevatorInd, int currentFloor, String state, int passengers) {
+        ((ElevatorPanel)elevatorPanels[elevatorInd]).updatingPosition(currentFloor, state, passengers);
     }
 
     // Function for the individual panels that displays information for each of the elevators of the system
@@ -67,8 +67,8 @@ public class GUIForElevator extends JFrame {
         }
 
         // Updates the position label with the current floor that the elevator is currently on
-        public void updatingPosition(int floor) {
-            positionLabel.setText("The Elevator Subsystem is Currently at Floor Number: " + floor);
+        public void updatingPosition(int floor, String state, int passengers) {
+            positionLabel.setText("<html>The Elevator Subsystem is Currently at Floor Number: " + floor +
+                    "<br>The current state is: " + state + "<br>The passenger count is: " + passengers + "</html>");
         }
     }
-}
