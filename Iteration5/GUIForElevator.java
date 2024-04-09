@@ -1,4 +1,5 @@
-//package org.example;
+// package org.example;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -37,7 +38,6 @@ public class GUIForElevator extends JFrame {
     // Function for the individual panels that displays information for each of the elevators of the system
     static class ElevatorPanel extends JPanel {
         private JLabel positionLabel;
-        private JLabel elevatorImageLabel;
         private JLabel elevatorIDLabel;
 
         // Created a ElevatorPanel with the provided elevator number
