@@ -16,7 +16,7 @@ public class Scheduler {
             // Construct a datagram socket and bind it to port 2025 and use it to forward packets
             // between client and server
             sendSocket = new DatagramSocket();
-            receiveSocket = new DatagramSocket(2025);
+            receiveSocket = new DatagramSocket(25);
         } catch (SocketException se) {
             se.printStackTrace();
             System.exit(1);

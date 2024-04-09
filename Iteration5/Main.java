@@ -22,6 +22,7 @@ public class Main {
         hostSchedulerThread.start();
         subsystemThread.start();
 
+
         // Simulation of the movement of the elevators over time, and performing an iteration through the time in order to update the elevator positions accurately
         while(true) {
             String elevatorDataString = subsystem.getInfo();

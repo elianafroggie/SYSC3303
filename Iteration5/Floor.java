@@ -74,7 +74,7 @@ public class Floor {
         String messageToScheduler = floor + "," + direction + "," + destination;
         byte[] data = messageToScheduler.getBytes();
         try{
-            return new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 2025);
+            return new DatagramPacket(data, data.length, InetAddress.getLocalHost(), 25);
         }catch(IOException e){
             e.printStackTrace();
             return null;
