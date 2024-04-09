@@ -13,10 +13,10 @@ public class Scheduler {
 
     public Scheduler() {
         try {
-            // Construct a datagram socket and bind it to port 25 and use it to forward packets
+            // Construct a datagram socket and bind it to port 2025 and use it to forward packets
             // between client and server
             sendSocket = new DatagramSocket();
-            receiveSocket = new DatagramSocket(25);
+            receiveSocket = new DatagramSocket(2025);
         } catch (SocketException se) {
             se.printStackTrace();
             System.exit(1);
@@ -106,9 +106,9 @@ public class Scheduler {
 
             if(state.equals("WAITING") && numStops == 0){
                 return pickupRequest + "," + destinationRequest + "," + directionRequest + "," + elevatorId;
-            }else if(directionRequest.equals(direction) && direction.equals("Down") && currentFloor > pickupRequest){
+            }else if(directionRequest.equals(direction) && direction.equals("Down") && currentFloor > pickupRequest && capacity < 5){
                 return pickupRequest + "," + destinationRequest + "," + directionRequest + "," + elevatorId;
-            }else if((directionRequest.equals(direction) && direction.equals("Up") && currentFloor < pickupRequest)){
+            }else if((directionRequest.equals(direction) && direction.equals("Up") && currentFloor < pickupRequest && capacity < 5)){
                 return pickupRequest + "," + destinationRequest + "," + directionRequest + "," + elevatorId;
             }
         }

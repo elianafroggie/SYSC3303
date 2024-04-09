@@ -72,3 +72,4 @@ public class GUIForElevator extends JFrame {
                     "<br>The current state is: " + state + "<br>The passenger count is: " + passengers + "</html>");
         }
     }
+}

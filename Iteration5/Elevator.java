@@ -338,6 +338,6 @@ public class Elevator implements Runnable {
 
     public synchronized String getInfo(){
         int numberOfStops = stopList.size() + nextUpList.size() + nextDownList.size();
-        return elevatorId + "," + getState() + "," + getDirection() + "," + getCurrentFloor() + "," + numberOfStops;
+        return elevatorId + "," + getState() + "," + getDirection() + "," + getCurrentFloor() + "," + numberOfStops + "," + getCurrentPassengerCount();
     }
 }
