@@ -28,6 +28,7 @@ public class Main {
             String elevatorDataString = subsystem.getInfo();
             String[] elevatorSubsystemParts = elevatorDataString.split(",");
 
+            // Parse the string of elevator information to get each elevator's state, current floor, and number of passengers
             for(int i = 0; i < elevatorSubsystemParts.length - 1; i += 6){
                 int elevatorId = Integer.parseInt(elevatorSubsystemParts[i].trim());
                 String state = elevatorSubsystemParts[1+i].trim();
