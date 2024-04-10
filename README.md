@@ -1,4 +1,4 @@
-##  SYSC 3303 - Project Iterations
+##  SYSC 3303 - Project Iteration 1
 
 ### Source Files Included:
 
