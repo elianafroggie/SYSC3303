@@ -31,7 +31,7 @@
 Run UnitTests.java using the Maven build system.
 
 
-## Group Roles:
+### Group Roles:
 
 Hemilkumar Patel: Updated Elevator.java and implemented Scheduler.java, and README.md
 
