@@ -4,22 +4,15 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        // Instantiate objects of the floor, scheduler and elevatorSubsystem
-        Floor floor = new Floor();
-        Scheduler host = new Scheduler();
         ElevatorSubsystem subsystem = new ElevatorSubsystem(4);
 
         // Instantiates the GUIForElevator object with 4 elevators, which sets up the GUI for displaying the real-time info about each elevator present in the control system
         GUIForElevator elevatorGUI = new GUIForElevator(4);
 
         // Start the processes or threads (the functions for each class)
-        Thread clientFloorThread = new Thread(() -> floor.readCSV("data.csv", ","));
-        Thread hostSchedulerThread = new Thread(host::scheduleRequests);
         Thread subsystemThread = new Thread(subsystem::sendReceiveRequests);
 
         // Start the threads
-        clientFloorThread.start();
-        hostSchedulerThread.start();
         subsystemThread.start();
 
 
@@ -28,7 +21,6 @@ public class Main {
             String elevatorDataString = subsystem.getInfo();
             String[] elevatorSubsystemParts = elevatorDataString.split(",");
 
-            // Parse the string of elevator information to get each elevator's state, current floor, and number of passengers
             for(int i = 0; i < elevatorSubsystemParts.length - 1; i += 6){
                 int elevatorId = Integer.parseInt(elevatorSubsystemParts[i].trim());
                 String state = elevatorSubsystemParts[1+i].trim();

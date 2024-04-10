@@ -77,6 +77,11 @@ public class Scheduler {
 
 
     }
+
+    /*
+    scheduleStop method takes in the floorDataString which contains the request from the csv as well as the elevatorDataString,
+    which is a string containing all elevator info for each elevator (each elevator appends 6 data items to a string and the enitre string is comma-delimited.
+    */
     public String scheduleStop(String floorDataString, String elevatorDataString){
         String[] floorParts = floorDataString.split(",");
 
@@ -87,7 +92,7 @@ public class Scheduler {
         String[] elevatorSubsystemParts = elevatorDataString.split(",");
         ArrayList<Integer> numStopList = new ArrayList<>();
 
-        // Big ol scheduler, each elevator string contains 5 elements (elevatorString size will be multiple of 5)
+        // Big ol scheduler, each elevator string contains 6 elements (elevatorString size will be multiple of 6)
         for(int i = 0; i < elevatorSubsystemParts.length - 1; i += 6){
             // For each of the elevators, parse and see if it looks like a good spot to add a stop
             //System.out.println(elevatorSubsystemParts.length);
@@ -97,13 +102,16 @@ public class Scheduler {
             int currentFloor = Integer.parseInt(elevatorSubsystemParts[3+i].trim());
             int numStops = Integer.parseInt(elevatorSubsystemParts[4+i].trim());
             int capacity = Integer.parseInt(elevatorSubsystemParts[5+i].trim());
+            // Implement capacity limits by only adding stops to numStopList accurately if the elevator has space
             if(capacity < 5) {
                 numStopList.add(numStops);
             }
+            // Otherwise add the value 100 to numStopList
             else{
                 numStopList.add(100);
             }
 
+            // Check each elevator to see if it is a good elevator to add stops to (if in waiting state and no stop requests)
             if(state.equals("WAITING") && numStops == 0){
                 return pickupRequest + "," + destinationRequest + "," + directionRequest + "," + elevatorId;
             }else if(directionRequest.equals(direction) && direction.equals("Down") && currentFloor > pickupRequest && capacity < 5){
@@ -121,7 +129,10 @@ public class Scheduler {
                 smallestWaitId = i;
             }
         }
+
+        // If all elevators are full, this function will be recursive.
         if(smallestWait == 100){
+            // Request data from ElevatorSubsystem
             byte elevatorData[] = new byte[100];
             byte request[] = new byte[]{0,0,0,0};
             try{
@@ -139,6 +150,7 @@ public class Scheduler {
             }catch (IOException e){
                 throw new RuntimeException(e);
             }
+            // After receiving the new elevator states, attempt to schedule stop again
             return scheduleStop(floorDataString, elevatorDataString);
         }
         return pickupRequest + "," + destinationRequest + "," + directionRequest + "," + smallestWaitId;

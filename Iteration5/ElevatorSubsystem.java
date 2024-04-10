@@ -11,6 +11,7 @@ public class ElevatorSubsystem {
 
     public ElevatorSubsystem(int numElevators) {
         elevators = new Elevator[numElevators];
+        // Instantiate and start an elevator thread for each elevator in this elevator system
         for (int i = 0; i < numElevators; i++) {
             elevators[i] = new Elevator(i, this);
             Thread elevatorThread = new Thread(elevators[i]);
@@ -72,6 +73,10 @@ public class ElevatorSubsystem {
 
         }
     }
+
+    /*
+    This method calls the addStops method within Elevator.java for the elevator scheduled to handle the stop
+    */
     public void addStops(int pickup, int destination, String direction, int elevatorId, int passIn){
         if (elevatorId >= 0 && elevatorId < elevators.length) {
             Elevator elevator = elevators[elevatorId];
@@ -83,6 +88,9 @@ public class ElevatorSubsystem {
         }
     }
 
+    /*
+    This method calls the getInfo() method on each elevator thread and appends all the data into a string (#megastring)
+    */
     public String getInfo(){
         String packet = "";
         for(int i = 0; i < elevators.length; i++){
