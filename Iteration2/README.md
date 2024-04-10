@@ -25,11 +25,13 @@
 
 (4) Open and View the JAVA Test file and Execute it.
 
+
 ## Testing Instructions:
 
 Run UnitTests.java using the Maven build system.
 
-Group Roles:
+
+## Group Roles:
 
 Hemilkumar Patel: Updated Elevator.java and implemented Scheduler.java, and README.md
 
