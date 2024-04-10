@@ -8,6 +8,8 @@ public class Elevator implements Runnable {
         MOVING_DOWN,
         WAITING
     }
+
+    // Initialize all neccessary variables
     private final int elevatorId;
     private elevatorState currentState;
     int currentFloor;
@@ -21,6 +23,7 @@ public class Elevator implements Runnable {
     private final int maxPassengerCapacity;
 
 
+    // Create an instance of each variable above
     public Elevator(int elevatorId, ElevatorSubsystem elevatorSubsystem) {
         this.elevatorId = elevatorId;
         this.elevatorSubsystem = elevatorSubsystem;
@@ -37,15 +40,18 @@ public class Elevator implements Runnable {
 
     @Override
     public void run() {
+        // run() is a state machine that contains all neccessary elevator state.
         System.out.println("Running");
-        // Simulate elevator operations im not explaining it just read it
         while (true) {
+            // Call getter methods
             stopList = getStopList();
             nextDownList = getNextDownList();
             nextUpList = getNextUpList();
             if (currentState == elevatorState.WAITING) {
-                setState(elevatorState.WAITING);
+                setState(elevatorState.WAITING); // Set state so it's easily accessed
                 if(stopList.isEmpty()){
+                    // If the stopList is empty, check nextUpList and nextDownList and if they are not empty, the 
+                    // largest of the 2 becomes the new stopList.
                     if (!nextUpList.isEmpty() && nextUpList.size() >= nextDownList.size()) {
                         stopList.addAll(nextUpList);
                         nextUpList.clear();
@@ -57,7 +63,9 @@ public class Elevator implements Runnable {
                 }
 
                 if (stopList.size() >= 2) {
+                    // Check direction of the stop list
                     if (stopList.get(0) > stopList.get(1)) {
+                        // Check if elevator is already on correct floor
                         if (currentFloor == stopList.getFirst()) {
                             currentState = elevatorState.DOORS_OPENING;
                             Iterator<Passenger> iterator = passengers.iterator();
@@ -83,6 +91,7 @@ public class Elevator implements Runnable {
                         }
                         direction = "Down";
                     }
+                    //Check direction again (this tile to check if going up)
                     if (stopList.get(0) < stopList.get(1)) {
                         if (currentFloor == stopList.getFirst()) {
                             currentState = elevatorState.DOORS_OPENING;
@@ -115,7 +124,7 @@ public class Elevator implements Runnable {
             if (currentState == elevatorState.DOORS_OPENING) {
                 setState(elevatorState.DOORS_OPENING);
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(4000); // Doors take 4 seconds to open
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -126,7 +135,7 @@ public class Elevator implements Runnable {
                         passengerExits();
                         iterator.remove(); // Use iterator's remove method to avoid ConcurrentModificationException
                         try {
-                            Thread.sleep(500);
+                            Thread.sleep(500); //Each passenger takes 0.5 seconds to board
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -138,11 +147,12 @@ public class Elevator implements Runnable {
             if (currentState == elevatorState.DOORS_CLOSING) {
                 setState(elevatorState.DOORS_CLOSING);
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(3000); //Doors take 3 seconds to close
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
                 System.out.println("Elevator " + this.elevatorId + " : Doors closed on floor: " + currentFloor);
+                // After doors have opened and closed on a floor, that floor is removed from the stopList
                 stopList.removeFirst();
 
                 if(stopList.size()>1) {
@@ -172,7 +182,7 @@ public class Elevator implements Runnable {
                 System.out.println("Elevator " + this.elevatorId + " : Moving up");
                 while (currentFloor < stopList.getFirst()) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(3000); // Takes 2 seconds to travel between floors
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -199,7 +209,7 @@ public class Elevator implements Runnable {
                 System.out.println("Elevator " + this.elevatorId + " : Moving Down");
                 while (currentFloor > stopList.getFirst()) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(3000); // Takes 3 seconds to move between floors
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -228,10 +238,11 @@ public class Elevator implements Runnable {
 
     public synchronized void addStops(int pickupFloor, int destinationFloor, String direction, int passIn){
         // This is the logic for adding floors to the floor list of stops for the elevator
-        // Currently I have decided that starvation is a myth from big tech
         if((getCurrentPassengerCount() + passIn) > getMaxPassengerCapacity()) {
             System.out.println("Elevator " + this.elevatorId + " is at full capacity. Cannot add more stops.");
         }
+
+        // Check if stop list is empty
         else if(currentState == elevatorState.WAITING && stopList.isEmpty() && nextDownList.isEmpty() && nextUpList.isEmpty()){
             stopList.add(pickupFloor);
             stopList.add(destinationFloor);
@@ -242,6 +253,8 @@ public class Elevator implements Runnable {
                 currentPassengerCount++;
             }
         }
+
+        // Check if elevator is going in the same direction of request and if the elevator can pickup the passenger
         else if (direction.equals("Up") && this.direction.equals("Up") &&
                 (currentFloor <= pickupFloor || currentFloor >= stopList.getFirst())) {
             stopList.add(pickupFloor);
@@ -272,6 +285,8 @@ public class Elevator implements Runnable {
                 currentPassengerCount++;
             }
 
+        // If unable to add the passenger to the current trip, the passenger's request goes to nextUpList or nextDownList
+        // to be serviced when the oppertunity arises
         } else{
             if (direction.equals("Up")) {
                 nextUpList.add(pickupFloor);
@@ -307,6 +322,8 @@ public class Elevator implements Runnable {
         System.out.println("Request for elevator added to elevator queue. Current passenger count: " + getCurrentPassengerCount());
         //System.out.println(stopList + "is size: " + stopList.size());
     }
+
+    // Getter functions
     public synchronized elevatorState getState() {
         return currentState;
     }
