@@ -1,3 +1,5 @@
+##  SYSC 3303 - Project Iteration 3
+
 ## Source Files Included:
 
 (1) ClientFloor.java: This source file contains the implementation that can read requests from CSV file format and send them to the Scheduler for processing in the Elevator System.
@@ -10,7 +12,10 @@
 
 ## Step-by-Step Setup Instructions:
 
-(1) Download the ZIP archive file onto your Computer, and Open the Iteration3 Project Folder. 
+(1) Download the ZIP archive file onto your Computer, and Open the Iteration3 Project Folder.
+
 (2) Open IntelliJ IDEA IDE and Setup a new Workspace. 
+
 (3) Under the Main Menu, Click File and then Open… You should be able to view the imported Iteration3 Project Folder in the Package Explorer screen.
+
 (4) Open and View the JAVA Test file and Execute it.
