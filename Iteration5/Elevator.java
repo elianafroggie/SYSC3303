@@ -182,7 +182,7 @@ public class Elevator implements Runnable {
                 System.out.println("Elevator " + this.elevatorId + " : Moving up");
                 while (currentFloor < stopList.getFirst()) {
                     try {
-                        Thread.sleep(3000); // Takes 2 seconds to travel between floors
+                        Thread.sleep(2000); // Takes 2 seconds to travel between floors
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -209,7 +209,7 @@ public class Elevator implements Runnable {
                 System.out.println("Elevator " + this.elevatorId + " : Moving Down");
                 while (currentFloor > stopList.getFirst()) {
                     try {
-                        Thread.sleep(3000); // Takes 3 seconds to move between floors
+                        Thread.sleep(2000); // Takes 2 seconds to move between floors
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
