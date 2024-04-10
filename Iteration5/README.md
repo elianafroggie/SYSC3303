@@ -28,6 +28,8 @@
 (4) Open and View the JAVA source files and do the execution process.
 ** Note: This project is built in IntelliJ using the Maven build system, if copying and pasting files ensure that you use this build system at first
 
+To Run the Test Files for Iteration 5: You can run the ElevatorTest.java to test and verify the Elevator functionality, run SchedulerTest.java to test and verify the Scheduler functionality, and lastly run FloorTest.java to test and verify the Floor functionality by getting outputs for each test files, as these are the main components of the system.
+
 
 ### Group Roles:
 
